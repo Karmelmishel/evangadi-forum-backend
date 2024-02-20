@@ -37,6 +37,22 @@ function generateQuestionId() {
   return `Q-${timestamp}-${randomNumber}`;
 }
 
+// red all question
+async function readAllQuestion(req, res) {
+  const readAllQuestion = `SELECT * FROM questions ORDER BY id DESC`;
+
+  try {
+    const connection = await dbConnection.getConnection();
+    const [result] = await connection.query(readAllQuestion);
+    connection.release();
+    res.json({ task: result });
+    res.send("all question");
+  } catch (err) {
+    res.send(err.message);
+  }
+}
+
 module.exports = {
   askquestion,
+  readAllQuestion,
 };
