@@ -52,7 +52,26 @@ async function readAllQuestion(req, res) {
   }
 }
 
+// read single question
+async function readQuestion(req, res) {
+  const id = req.params.id;
+  const readQuestion = SELECT * FROM questions WHERE id='${id}';
+
+  try {
+    const [result] = await dbConnection.query(readQuestion);
+
+    if (result.length === 0) {
+      return res.send(`No task with this id ${id}`);
+    } else {
+      return res.json(result);
+    }
+  } catch (error) {
+    return res.send(error.message);
+  }
+}
+
 module.exports = {
   askquestion,
   readAllQuestion,
+  readQuestion
 };

@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router();
 const dbConnection = require("../db/dbConfig");
 
-const { askquestion, readAllQuestion } = require("../controller/questionController");
+const {
+  askquestion,
+  readAllQuestion,
+  readQuestion,
+} = require("../controller/questionController");
 
 // insert question
 router.post("/ask-questions", askquestion);
@@ -10,3 +14,6 @@ router.post("/ask-questions", askquestion);
 // red all question
 router.get("/all-questions", readAllQuestion);
 module.exports = router;
+
+// read single question
+router.get("/all-questions/:id", readQuestion);
