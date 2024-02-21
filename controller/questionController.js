@@ -69,9 +69,33 @@ async function readQuestion(req, res) {
     return res.send(error.message);
   }
 }
+// edit single question 
+async function editQuestion(req, res) {
+  const id = req.params.id;
+  const { title, description } = req.body;
+
+  if (!description) {
+    return res.send("question is required");
+  }
+
+  const updateQuestion = `UPDATE questions SET description="${description}", title="${title}" WHERE id=${id}`;
+
+  try {
+    const [result] = await dbConnection.query(updateQuestion);
+
+    if (result.affectedRows == 0) {
+      return res.send(`No question with id ${id}`);
+    } else {
+      return res.json("Question updated");
+    }
+  } catch (err) {
+    return res.send(err.message);
+  }
+}
 
 module.exports = {
   askquestion,
   readAllQuestion,
-  readQuestion
+  readQuestion,
+  editQuestion
 };
