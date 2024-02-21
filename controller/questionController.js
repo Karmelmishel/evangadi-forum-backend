@@ -92,10 +92,22 @@ async function editQuestion(req, res) {
     return res.send(err.message);
   }
 }
+// Delete single task
+async function deleteQuestion(req, res) {
+  const id = req.params.id;
+  const deleteQ = DELETE FROM questions WHERE id = ${id};
 
+  try {
+    await dbConnection.query(deleteQ);
+    return res.json("Question deleted");
+  } catch (err) {
+    return res.send(err.message);
+  }
+}
 module.exports = {
   askquestion,
   readAllQuestion,
   readQuestion,
-  editQuestion
+  editQuestion,
+  deleteQuestion
 };
