@@ -21,3 +21,6 @@ router.get("/all-questions/:id", readQuestion);
 
 // update single question 
 router.patch("/all-questions/:id", editQuestion);
+
+
+module.exports = router;
