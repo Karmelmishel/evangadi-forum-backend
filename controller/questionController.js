@@ -55,7 +55,7 @@ async function readAllQuestion(req, res) {
 // read single question
 async function readQuestion(req, res) {
   const id = req.params.id;
-  const readQuestion = SELECT * FROM questions WHERE id='${id}';
+  const readQuestion = `SELECT * FROM questions WHERE id='${id}'`;
 
   try {
     const [result] = await dbConnection.query(readQuestion);
@@ -95,7 +95,7 @@ async function editQuestion(req, res) {
 // Delete single task
 async function deleteQuestion(req, res) {
   const id = req.params.id;
-  const deleteQ = DELETE FROM questions WHERE id = ${id};
+  const deleteQ = `DELETE FROM questions WHERE id = ${id}`;
 
   try {
     await dbConnection.query(deleteQ);
