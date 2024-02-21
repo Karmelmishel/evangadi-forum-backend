@@ -61,7 +61,7 @@ async function readQuestion(req, res) {
     const [result] = await dbConnection.query(readQuestion);
 
     if (result.length === 0) {
-      return res.send(`No task with this id ${id}`);
+      return res.send(`No question with this id ${id}`);
     } else {
       return res.json(result);
     }
