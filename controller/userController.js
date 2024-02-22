@@ -21,7 +21,7 @@ async function register(req, res) {
     if (user.length > 0) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ msg: "user alredy register" });
+        .json({ msg: "user already registered" });
     }
 
     if (password.length < 8) {
@@ -37,7 +37,7 @@ async function register(req, res) {
       "INSERT INTO users (username, firstname, lastname, email, password) VALUES (?,?,?,?,?)",
       [username, firstname, lastname, email, hashedpassword]
     );
-    return res.status(StatusCodes.CREATED).json({ msg: "user register" });
+    return res.status(StatusCodes.CREATED).json({ msg: "user registered" });
   } catch (error) {
     console.log(error.message);
     return res
