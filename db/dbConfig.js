@@ -1,12 +1,12 @@
-const mysql2 = require('mysql2');
+const mysql2 = require("mysql2");
 
 const dbConnection = mysql2.createPool({
-    user:process.env.USER,
-    database:process.env.DATABASE,
-    host: "localhost",
-    password: process.env.PASSWORD,
-    connectionLimit:10
-})
+  user: process.env.USER,
+  database: process.env.DATABASE,
+  host: "localhost",
+  password: process.env.PASSWORD,
+  connectionLimit: 10,
+});
 
 // dbConnection.execute("select 'test'", (err,result)=>{
 //     if(err){
@@ -15,4 +15,4 @@ const dbConnection = mysql2.createPool({
 //         console.log(result)
 //     }
 // })
-module.exports = dbConnection.promise()
+module.exports = dbConnection.promise();

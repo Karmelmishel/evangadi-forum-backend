@@ -1,7 +1,7 @@
-require("dotenv").config()
+require("dotenv").config();
 const express = require("express");
 const app = express();
-const port = 5009;
+const port = 5500;
 
 // db connection
 const dbConnection = require("./db/dbConfig");
@@ -14,8 +14,10 @@ const dbConnection = require("./db/dbConfig");
 const userRoutes = require("./routes/userRouts");
 
 const questionRoutes = require("./routes/questionRouter");
+const answerRoutes = require("./routes/answerRouter");
+
 // authMiddleweare
-const authMiddleware = require("./middleweare/authMiddleware")
+const authMiddleware = require("./middleweare/authMiddleware");
 
 // jeson middlewear to extract json data
 app.use(express.json());
@@ -24,9 +26,10 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 
 // question routes middleware
-app.use("/api/questions", authMiddleware,  questionRoutes);
+app.use("/api/questions", authMiddleware, questionRoutes);
 
 // answer routes middleware
+app.use("/api/answers", authMiddleware, answerRoutes); // Corrected middleware path
 
 async function start() {
   try {

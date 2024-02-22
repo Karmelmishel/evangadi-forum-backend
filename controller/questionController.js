@@ -69,7 +69,7 @@ async function readQuestion(req, res) {
     return res.send(error.message);
   }
 }
-// edit single question 
+// edit single question
 async function editQuestion(req, res) {
   const id = req.params.id;
   const { title, description } = req.body;
@@ -78,7 +78,7 @@ async function editQuestion(req, res) {
     return res.send("question is required");
   }
 
-  const updateQuestion = `UPDATE questions SET description="${description}", title="${title}" WHERE id=${id}`;
+  const updateQuestion = `UPDATE questions SET description="${description}", title="${title}", tag="${title}" WHERE id=${id}`;
 
   try {
     const [result] = await dbConnection.query(updateQuestion);
@@ -93,21 +93,37 @@ async function editQuestion(req, res) {
   }
 }
 // Delete single task
+// async function deleteQuestion(req, res) {
+//   const id = req.params.id;
+//   const deleteQ = `DELETE FROM questions WHERE id = ${id}`;
+
+//   try {
+//     await dbConnection.query(deleteQ);
+//     return res.json("Question deleted");
+//   } catch (err) {
+//     return res.send(err.message);
+//   }
+// }
 async function deleteQuestion(req, res) {
   const id = req.params.id;
-  const deleteQ = `DELETE FROM questions WHERE id = ${id}`;
 
   try {
-    await dbConnection.query(deleteQ);
-    return res.json("Question deleted");
+    // Delete associated answers first
+    await dbConnection.query(`DELETE FROM answers WHERE questionid = '${id}'`);
+
+    // Now delete the question
+    await dbConnection.query(`DELETE FROM questions WHERE id = '${id}'`);
+    console.log("Question and associated answers deleted");
+    return res.json("Question and associated answers deleted");
   } catch (err) {
-    return res.send(err.message);
+    return res.status(500).send(err.message);
   }
 }
+
 module.exports = {
   askquestion,
   readAllQuestion,
   readQuestion,
   editQuestion,
-  deleteQuestion
+  deleteQuestion,
 };
