@@ -52,5 +52,25 @@ async function readAllAnswer(req, res) {
     res.send(err.message);
   }
 }
+// red single answer
+async function singleAnswer(req, res) {
+  const answerid = req.params.answerid;
+  const allAnswer = `SELECT * FROM answers WHERE answerid = '${answerid}'`;
+  try {
+    const connection = await dbConnection.getConnection();
+    const [result] = await connection.query(allAnswer );
+    connection.release();
 
-module.exports = { giveAnswer, readAllAnswer };
+    if (result.length === 0) {
+      res.send("No answers");
+    } else {
+      res.json({ answers: result });
+    }
+  } catch (err) {
+    res.send(err.message);
+  }
+}
+
+
+module.exports = { giveAnswer, readAllAnswer,singleAnswer };
+
