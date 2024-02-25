@@ -71,6 +71,28 @@ async function singleAnswer(req, res) {
   }
 }
 
+// edit single answer
+async function editAnswer(req, res) {
+  const answerid = req.params.answerid;
+  const { answer } = req.body;
 
-module.exports = { giveAnswer, readAllAnswer,singleAnswer };
+  if (!answer) {
+    return res.send("Answer is required");
+  }
+
+  const updateAnswer = `UPDATE answers SET answer="${answer}" WHERE answerid ='${answerid}'`;
+
+  try {
+    const [result] = await dbConnection.query(updateAnswer);
+
+    if (result.affectedRows == 0) {
+      return res.send(`No Answer with id '${answerid}'`);
+    } else {
+      return res.json("Answer updated");
+    }
+  } catch (err) {
+    return res.send(err.message);
+  }
+}
+module.exports = { giveAnswer, readAllAnswer,singleAnswer,editAnswer };
 

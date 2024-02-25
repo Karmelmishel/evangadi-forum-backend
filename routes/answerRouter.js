@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { giveAnswer, readAllAnswer ,singleAnswer} = require("../controller/answerController");
+const { giveAnswer, readAllAnswer ,singleAnswer,editAnswer} = require("../controller/answerController");
 
 // give/post answer
 
@@ -11,4 +11,6 @@ router.post("/giveanswer/:questionid", giveAnswer);
 router.get("/getanswers/:questionid", readAllAnswer);
 // red single answer
 router.get("/getanswer/:answerid", singleAnswer);
+// updet single answer
+router.patch("/getanswer/:answerid", editAnswer);
 module.exports = router;
