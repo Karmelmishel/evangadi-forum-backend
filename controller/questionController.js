@@ -104,10 +104,28 @@ async function deleteQuestion(req, res) {
     return res.send(err.message);
   }
 }
+// red my question
+async function myQuestion(req, res) {
+  const userid = req.params.userid;
+  const readQuestion = `SELECT * FROM question WHERE userid='${userid}'`;
+
+  try {
+    const [result] = await dbConnection.query(readQuestion);
+
+    if (result.length === 0) {
+      return res.send(`No question with this id ${userid}`);
+    } else {
+      return res.json(result);
+    }
+  } catch (error) {
+    return res.send(error.message);
+  }
+}
 module.exports = {
   askquestion,
   readAllQuestion,
   readQuestion,
   editQuestion,
-  deleteQuestion
+  deleteQuestion, 
+  myQuestion
 };
