@@ -8,6 +8,7 @@ const {
   readQuestion,
   editQuestion,
   deleteQuestion,
+   myQuestion
 } = require("../controller/questionController");
 
 // insert question
@@ -26,6 +27,7 @@ router.patch("/all-questions/:id", editQuestion);
 // Delete single question
 router.delete("/all-questions/:id", deleteQuestion);
 
-
+// my question
+router.get('/my-questions/:userid', myQuestion);
 
 module.exports = router;
