@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { giveAnswer, readAllAnswer ,singleAnswer,editAnswer} = require("../controller/answerController");
+const { giveAnswer, readAllAnswer ,singleAnswer,editAnswer, deleteAnswer, myAnswer} = require("../controller/answerController");
 
 // give/post answer
 
