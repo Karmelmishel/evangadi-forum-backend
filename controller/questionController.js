@@ -5,6 +5,11 @@ const { StatusCodes } = require("http-status-codes");
 async function askquestion(req, res) {
   const { title, description } = req.body;
   const userId = req.user.userid;
+   if (!title || !description) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Failed to ask the question" });
+  }
   try {
     const result = await dbConnection.query(
       "INSERT INTO questions (questionid, userid, title, description, tag) VALUES (?, ?, ?, ?, ?)",
