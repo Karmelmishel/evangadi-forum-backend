@@ -94,5 +94,35 @@ async function editAnswer(req, res) {
     return res.send(err.message);
   }
 }
-module.exports = { giveAnswer, readAllAnswer,singleAnswer,editAnswer };
+// Delete single answer
+async function deleteAnswer(req, res) {
+  const answerid = req.params.answerid;
+  const deleteA = `DELETE FROM answers WHERE answerid ='${answerid}'`;
+
+  try {
+    await dbConnection.query(deleteA);
+    return res.json("Answer deleted");
+  } catch (err) {
+    return res.send(err.message);
+  }
+}
+// my answer
+async function myAnswer(req, res) {
+  const userid = req.params.userid;
+  const allAnswer = `SELECT * FROM answers WHERE userid = '${userid}'`;
+  try {
+    const connection = await dbConnection.getConnection();
+    const [result] = await connection.query(allAnswer );
+    connection.release();
+
+    if (result.length === 0) {
+      res.send("No answers");
+    } else {
+      res.json({ answers: result });
+    }
+  } catch (err) {
+    res.send(err.message);
+  }
+}
+module.exports = { giveAnswer, readAllAnswer,singleAnswer,editAnswer, deleteAnswer, myAnswer };
 
