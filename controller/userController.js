@@ -64,14 +64,14 @@ async function login(req, res) {
     if (user.length == 0) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ msg: "invalid credential" });
+        .json({ msg: "invalid email" });
     }
     // compare password
     const isMatch = await bcrypt.compare(password, user[0].password);
     if (!isMatch) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ msg: "invalid credential" });
+        .json({ msg: "Wrong password. Try again" });
     }
     const username = user[0].username;
     const userid = user[0].userid;
