@@ -13,4 +13,9 @@ router.get("/getanswers/:questionid", readAllAnswer);
 router.get("/getanswer/:answerid", singleAnswer);
 // updet single answer
 router.patch("/getanswer/:answerid", editAnswer);
+// delete single answer
+router.delete("/getanswer/:answerid", deleteAnswer);
+
+// red my answer
+router.get("/my-answer/:userid", myAnswer);
 module.exports = router;
