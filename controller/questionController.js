@@ -5,27 +5,27 @@ const { StatusCodes } = require("http-status-codes");
 async function askquestion(req, res) {
   const { title, description } = req.body;
   const userId = req.user.userid;
-   if (!title || !description) {
+  if (!title || !description) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ msg: "Failed to ask the question" });
   }
   try {
+    const timestamp = new Date(); // Get the current timestamp
     const result = await dbConnection.query(
-      "INSERT INTO questions (questionid, userid, title, description, tag) VALUES (?, ?, ?, ?, ?)",
-      [generateQuestionId(), userId, title, description, title]
+      "INSERT INTO question (questionid, userid, title, description, tag, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
+      [generateQuestionId(), userId, title, description, title, timestamp]
     );
-    console.log(
-      "INSERT INTO questions (questionid, userid, title, description, tag) VALUES (?, ?, ?, ?, ?)",
-      [generateQuestionId(), userId, title, description, title]
-    );
-
+   
     if (result.affectedRows) {
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ msg: "Failed to ask the question" });
     } else {
-      return res.status(StatusCodes.CREATED).json({ msg: "Question asked" });
+      const currentTime = new Date(); // Get the current time
+      const timeSinceQuestionAsked = currentTime - timestamp; // Calculate the time difference in milliseconds
+      
+      
     }
   } catch (error) {
     console.log(error.message);
@@ -34,8 +34,6 @@ async function askquestion(req, res) {
       .json({ msg: "Something went wrong, try again" });
   }
 }
-
-// Function to generate a unique question ID
 function generateQuestionId() {
   const timestamp = new Date().getTime();
   const randomNumber = Math.floor(Math.random() * 1000);
@@ -44,14 +42,13 @@ function generateQuestionId() {
 
 // red all question
 async function readAllQuestion(req, res) {
-  const readAllQuestion = `SELECT * FROM questions ORDER BY id DESC`;
+  const readAllQuestion = `SELECT title, questionid, username FROM question join users on users.userid = question.userid ORDER BY id DESC`;
 
   try {
     const connection = await dbConnection.getConnection();
     const [result] = await connection.query(readAllQuestion);
     connection.release();
     res.json({ task: result });
-    res.send("all question");
   } catch (err) {
     res.send(err.message);
   }
@@ -59,14 +56,14 @@ async function readAllQuestion(req, res) {
 
 // read single question
 async function readQuestion(req, res) {
-  const id = req.params.id;
-  const readQuestion = `SELECT * FROM questions WHERE id='${id}'`;
+  const questionid = req.params.questionid;
+  const readQuestion = `SELECT * FROM question WHERE questionid='${questionid}'`;
 
   try {
     const [result] = await dbConnection.query(readQuestion);
 
     if (result.length === 0) {
-      return res.send(`No question with this id ${id}`);
+      return res.send(`No question with this id ${questionid}`);
     } else {
       return res.json(result);
     }
@@ -74,7 +71,8 @@ async function readQuestion(req, res) {
     return res.send(error.message);
   }
 }
-// edit single question 
+
+// edit question
 async function editQuestion(req, res) {
   const id = req.params.id;
   const { title, description } = req.body;
@@ -83,7 +81,7 @@ async function editQuestion(req, res) {
     return res.send("question is required");
   }
 
-  const updateQuestion = `UPDATE questions SET description="${description}", title="${title}" WHERE id=${id}`;
+  const updateQuestion = `UPDATE question SET description="${description}", title="${title}" WHERE id=${id}`;
 
   try {
     const [result] = await dbConnection.query(updateQuestion);
@@ -97,10 +95,11 @@ async function editQuestion(req, res) {
     return res.send(err.message);
   }
 }
+
 // Delete single task
 async function deleteQuestion(req, res) {
   const id = req.params.id;
-  const deleteQ = `DELETE FROM questions WHERE id = ${id}`;
+  const deleteQ = `DELETE FROM question WHERE id = ${id}`;
 
   try {
     await dbConnection.query(deleteQ);
@@ -126,11 +125,13 @@ async function myQuestion(req, res) {
     return res.send(error.message);
   }
 }
+
+
 module.exports = {
   askquestion,
   readAllQuestion,
   readQuestion,
   editQuestion,
-  deleteQuestion, 
-  myQuestion
+  deleteQuestion,
+  myQuestion,
 };

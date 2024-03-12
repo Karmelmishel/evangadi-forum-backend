@@ -64,14 +64,14 @@ async function login(req, res) {
     if (user.length == 0) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ msg: "invalid email" });
+        .json({ msg: "invalid credential" });
     }
     // compare password
     const isMatch = await bcrypt.compare(password, user[0].password);
     if (!isMatch) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ msg: "Wrong password. Try again" });
+        .json({ msg: "invalid credential" });
     }
     const username = user[0].username;
     const userid = user[0].userid;
@@ -80,7 +80,7 @@ async function login(req, res) {
     });
     return res
       .status(StatusCodes.OK)
-      .json({ msg: "user login successful", token });
+      .json({ msg: "user login successful", token, username});
   } catch (error) {
     console.log(error.message);
     return res
